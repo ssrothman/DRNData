@@ -4,4 +4,6 @@ cmsenv
 cd src
 git cms-init
 git cms-checkout-topic ssrothman:port_to_egm
-git clone git@github.com/ssrothman/DRNData.git
+git clone git@github.com:ssrothman/DRNData.git
+scram b -j 16
+cmsRun DRNData/EGM_DRN/test/Electron_RecHit_AOD_cfg.py  
