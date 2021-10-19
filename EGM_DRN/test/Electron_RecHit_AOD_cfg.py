@@ -15,8 +15,8 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(5000) )
 #process.options.numberOfStreams = cms.untracked.uint32(8)
 process.options.SkipEvent = cms.untracked.vstring('ProductNotFound')
 
-process.TritonService.verbose = True
-process.TritonService.fallback.verbose = True
+process.TritonService.verbose = False
+process.TritonService.fallback.verbose = False
 process.TritonService.fallback.useDocker = False
 process.TritonService.fallback.useGPU = False
 
@@ -39,61 +39,17 @@ print(options.inputFile)
 process.source = cms.Source("PoolSource",
                                 # replace 'myfile.root' with the source file you want to use
                                 fileNames = cms.untracked.vstring(
-#'root://cms-xrd-global.cern.ch///store/mc/RunIISummer19UL18RECO/DYJetsToEE_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/AODSIM/NoPUECAL4BX25_106X_upgrade2018_realistic_v11_Ecal4-v2/20000/D2F029DD-CACC-AA48-BC51-D1987DD92E26.root'
-"file:testfile.root"
-#'root://cms-xrd-global.cern.ch///store/mc/RunIISummer19UL18RECO/GJet_Pt-20toInf_DoubleEMEnriched_MGG-40to80_TuneCP5_13TeV_Pythia8/AODSIM/106X_upgrade2018_realistic_v11_L1v1-v2/10000/755C8490-4B61-E648-8984-4ED4CF3D3873.root'
-
+'root://cms-xrd-global.cern.ch///store/mc/RunIISummer20UL18RECO/DoubleElectron_Pt-1To300-gun/AODSIM/FlatPU0to70EdalIdealGT_EdalIdealGT_106X_upgrade2018_realistic_v11_L1v1_EcalIdealIC-v2/270000/4CDD9457-E14C-D84A-9BD4-3140CB6AEEB6.root'
                 )
                             )
 
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 
 from Configuration.AlCa.GlobalTag import GlobalTag
-#process.GlobalTag = GlobalTag(process.GlobalTag, '106X_upgrade2018_realistic_v11_Ecal5', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, '106X_upgrade2018_realistic_v11_Ecal5', '')
 
 
 from CondCore.DBCommon.CondDBSetup_cfi import *
-process.GlobalTag = cms.ESSource("PoolDBESSource",
-                               CondDBSetup,
-                               connect = cms.string('frontier://FrontierProd/CMS_CONDITIONS'),
-                               globaltag = cms.string('106X_upgrade2018_realistic_v11_Ecal4'),
-			       toGet = cms.VPSet(
-
-
-                cms.PSet(record = cms.string("GBRDWrapperRcd"),
-                        tag = cms.string("DoubleElectron_FlatPt-1To300_FlatPU0to70_ECAL5_106X_upgrade2018_realistic_v11_L1v1-v2"),
-                        label = cms.untracked.string("pfscecal_EBCorrection_offline_v2"),
-                        connect = cms.string("sqlite_file:DBFiles/correctedECALSampleDBFile_EB.db")
-                        ),
-
-                cms.PSet(record = cms.string("GBRDWrapperRcd"),
-                        tag = cms.string("DoubleElectron_FlatPt-1To300_FlatPU0to70_ECAL5_106X_upgrade2018_realistic_v11_L1v1-v2"),
-                        label = cms.untracked.string("pfscecal_EBUncertainty_offline_v2"),
-                        connect = cms.string("sqlite_file:DBFiles/correctedECALSampleDBFile_EB.db")
-                        ),
-
-
-                cms.PSet(record = cms.string("GBRDWrapperRcd"),
-                        tag = cms.string("DoubleElectron_FlatPt-1To300_FlatPU0to70_ECAL5_106X_upgrade2018_realistic_v11_L1v1-v2"),
-                        label = cms.untracked.string("pfscecal_EECorrection_offline_v2"),
-                        connect = cms.string("sqlite_file:DBFiles/correctedECALSampleDBFile_EE.db")
-                        ),
-
-
-                cms.PSet(record = cms.string("GBRDWrapperRcd"),
-                        tag = cms.string("DoubleElectron_FlatPt-1To300_FlatPU0to70_ECAL5_106X_upgrade2018_realistic_v11_L1v1-v2"),
-                        label = cms.untracked.string("pfscecal_EEUncertainty_offline_v2"),
-                        connect = cms.string("sqlite_file:DBFiles/correctedECALSampleDBFile_EE.db")
-                        )
-
-
-
-                        )
-
-                              )
-
-
-
 process.DRNProducerEB = cms.EDProducer('SCEnergyCorrectorDRNProducer',
    correctorCfg = cms.PSet(
      ecalRecHitsEE = cms.InputTag('reducedEcalRecHitsEE'),
@@ -108,7 +64,7 @@ process.DRNProducerEB = cms.EDProducer('SCEnergyCorrectorDRNProducer',
         modelName = cms.string("EGM_DRN"),
         modelVersion = cms.string(""),
         modelConfigPath = cms.FileInPath("DRNDeployment/EGM_DRN/data/models/{}/config.pbtxt".format('EGM_DRN')),
-        verbose = cms.untracked.bool(True),
+        verbose = cms.untracked.bool(False),
         allowedTries = cms.untracked.uint32(1),
         useSharedMemory = cms.untracked.bool(True),
         compression = cms.untracked.string(""),
@@ -130,7 +86,7 @@ process.DRNProducerEE = cms.EDProducer('SCEnergyCorrectorDRNProducer',
         modelName = cms.string('EGM_DRN'),
         modelVersion = cms.string(""),
         modelConfigPath = cms.FileInPath("DRNDeployment/EGM_DRN/data/models/{}/config.pbtxt".format('EGM_DRN')),
-        verbose = cms.untracked.bool(True),
+        verbose = cms.untracked.bool(False),
         allowedTries = cms.untracked.uint32(1),
         useSharedMemory = cms.untracked.bool(True),
         compression = cms.untracked.string(""),
